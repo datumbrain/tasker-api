@@ -1,0 +1,15 @@
+{
+  "name": "tasker-api",
+  "version": "0.0.1",
+  "description": "tasker api",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
