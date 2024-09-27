@@ -1,5 +1,5 @@
 # Tasker API
 
-[![Build and Push Docker Image to Docker Hub](https://github.com/naumanzchaudhry/tasker-api/actions/workflows/docker-publish.yml/badge.svg?branch=main)](https://github.com/naumanzchaudhry/tasker-api/actions/workflows/docker-publish.yml)
+[![CI Build & Publish to Docker Hub](https://github.com/naumanzchaudhry/tasker-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/naumanzchaudhry/tasker-ui/actions/workflows/ci.yml)
 
 Express based API for tasker-ui frontend.
