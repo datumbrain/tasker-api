@@ -4,7 +4,7 @@
   "description": "tasker api",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js",
+    "dev": "nodemon ./server.js",
     "test": "vitest",
     "test:watch": "vitest --watch"
   },
