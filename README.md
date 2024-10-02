@@ -6,20 +6,26 @@ This is the API for a sample app created for [TDD in Legacy Code Transformation]
 
 ## Getting Started
 
+### Setup .env
+
+Copy `.env.sample` to `.env` and update the values accordingly.
+
+Configure the `DATABASE_URL` to point to your PostgreSQL database by modifying username, password, and database name.
+
+### Install Dependencies
+
 ```bash
-# Clone the repository
-git clone https://github.com/naumanzchaudhry/tasker-api.git
-
-# Change directory
-cd tasker-api
-
-# Install dependencies
 npm install
+```
 
-# Start the server
+### Start the server
+
+```
 npm run dev
+```
 
-# Run Tests
+### Run Tests
+
+```
 npm run test
-
 ```
