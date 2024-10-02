@@ -26,7 +26,7 @@ const authenticateToken = (req, res, next) => {
 }
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.status(200).json({ data: 'Hello World!' })
 })
 
 // Signup route
@@ -125,7 +125,4 @@ app.delete('/todos/:id', authenticateToken, async (req, res) => {
   }
 })
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-})
+module.exports = app
