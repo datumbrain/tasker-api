@@ -1,4 +1,4 @@
-name: CI Build & Publish to Docker Hub
+name: Build & Publish
 
 on:
   push:
