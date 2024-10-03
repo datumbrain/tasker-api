@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./server.js",
+    "test:unit": "vitest run tests/unit/**/*.unit.spec.ts tests/unit/*.unit.spec.ts",
+    "test:integration": "vitest run tests/integration/**/*.integration.spec.ts tests/integration/*.integration.spec.ts",
+    "test:component": "vitest run  tests/component/**/*.component.spec.ts tests/component/*.component.spec.ts",
+    "test:contract": "vitest run  tests/contract/**/*.contract.spec.ts tests/contract/*.contract.spec.ts",
     "test": "vitest",
     "test:watch": "vitest --watch"
   },

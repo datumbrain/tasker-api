@@ -19,32 +19,48 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       # Step 3: Install dependencies (npm or yarn based on your setup)
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Run tests
-      - name: Run tests
+      # Step 4: Run all tests
+      - name: Run all tests
         run: npm run test
 
-      # Step 5: Set up Docker
+      # Step 5: Run Unit Tests
+      - name: Run Unit Tests
+        run: npm run test:unit
+
+      # Step 6: Run Integration Tests
+      - name: Run Integration Tests
+        run: npm run test:integration
+
+      # Step 7: Run Component Tests
+      - name: Run Component Tests
+        run: npm run test:component
+
+      # Step 8: Run Contract Tests
+      - name: Run Contract Tests
+        run: npm run test:contract
+
+      # Step 9: Set up Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 6: Log in to Docker Hub
+      # Step 10: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 7: Build the Docker image
+      # Step 11: Build the Docker image
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ github.sha }} .
 
-      # Step 8: Push the Docker image to Docker Hub
+      # Step 12: Push the Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ github.sha }}
 
