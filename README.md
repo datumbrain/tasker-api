@@ -23,9 +23,39 @@ npm install
 ```
 npm run dev
 ```
+### Run Unit Tests with [Vitest](https://vitest.dev/)
 
-### Run Tests
+```sh
+npm run test:unit
+```
+
+### Run Integration Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:integration
+```
+
+### Run Component Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:component
+```
+
+### Run Contract Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:contract
+```
+
+### Run All Tests
 
 ```
 npm run test
 ```
+
+## Contributors
+
+| Name          | Role              |
+| ------------- | ----------------- |
+| Nauman Zafar  | Frontend Engineer |
+| Muaviya Imran | Frontend Engineer |
