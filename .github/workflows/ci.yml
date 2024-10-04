@@ -3,9 +3,8 @@ name: Build & Publish
 on:
   push:
     branches:
-      - main # This runs the action when code is pushed to the 'main' branch
-  pull_request:
-
+      - main # # Trigger workflow on pushes to 'main' (Production)
+      - uat # Trigger workflow on pushes to 'uat' (UAT)
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       # Step 3: Install dependencies (npm or yarn based on your setup)
       - name: Install dependencies
@@ -56,16 +55,35 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step 11: Build the Docker image
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ github.sha }} .
-
-      # Step 12: Push the Docker image to Docker Hub
-      - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ github.sha }}
-
-      # Optionally, add latest tag
-      - name: Tag Docker image as latest
+      # Step 11: Determine the environment based on the branch
+      - name: Determine environment
+        id: env-check
         run: |
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:latest
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/uat" ]]; then
+            echo "ENVIRONMENT=uat" >> $GITHUB_ENV
+          else
+            echo "Unknown branch. Exiting."
+            exit 1
+          fi
+
+      # Step 12: Build the Docker image with the appropriate tag
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ env.ENVIRONMENT }}"
+          docker build -t $IMAGE_TAG .
+          echo "Built image with tag: $IMAGE_TAG"
+
+      # Step 13: Push the Docker image to Docker Hub
+      - name: Push Docker image to Docker Hub
+        run: |
+          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ env.ENVIRONMENT }}"
+          docker push $IMAGE_TAG
+
+      # Optionally, add latest tag for main branch
+      - name: Tag Docker image as latest (main branch only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:prod ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:latest
