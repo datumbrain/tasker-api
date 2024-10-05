@@ -41,25 +41,26 @@ jobs:
 
       - name: Prepare Env Variables based on environment
         run: |
-
           if [[ "${{ github.event.inputs.environment }}" == "uat" ]]; then
-              ENVIRONMENT=uat
-              HTTP_PORT=${{ secrets.HTTP_PORT }}
-              DATABASE_URL=${{ secrets.UAT_DB_URL }}
-              JWT_SECRET=${{ secrets.JWT_SECRET }}
+              echo "Setting UAT environment variables"
+              echo "ENVIRONMENT=uat" >> $GITHUB_ENV
+              echo "HTTP_PORT=${{ secrets.HTTP_PORT }}" >> $GITHUB_ENV
+              echo "DATABASE_URL=${{ secrets.UAT_DB_URL }}" >> $GITHUB_ENV
+              echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           elif [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
-              ENVIRONMENT=prod
-              HTTP_PORT=${{ secrets.HTTP_PORT }}
-              DATABASE_URL=${{ secrets.UAT_DB_URL }}
-              JWT_SECRET=${{ secrets.JWT_SECRET }}
+              echo "Setting Production environment variables"
+              echo "ENVIRONMENT=prod" >> $GITHUB_ENV
+              echo "HTTP_PORT=${{ secrets.HTTP_PORT }}" >> $GITHUB_ENV
+              echo "DATABASE_URL=${{ secrets.UAT_DB_URL }}" >> $GITHUB_ENV
+              echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           fi
 
-      - name: Deploy API to GCP (${{ github.event.inputs.environment }})
+      - name: Deploy API to GCP (${{ env.ENVIRONMENT}})
         run: |
-          gcloud run deploy tasker-api-$ENVIRONMENT \
-          --image docker.io/naumanz/tasker-api:$ENVIRONMENT \
+          gcloud run deploy tasker-api-${{ env.ENVIRONMENT}} \
+          --image docker.io/naumanz/tasker-api:${{ env.ENVIRONMENT}} \
           --region us-central1 \
           --allow-unauthenticated \
-          --set-env-vars HTTP_PORT=$HTTP_PORT \
-          --set-env-vars DATABASE_URL=$DATABASE_URL \
-          --set-env-vars JWT_SECRET=$JWT_SECRET
+          --set-env-vars HTTP_PORT=${{ env.HTTP_PORT }} \
+          --set-env-vars DATABASE_URL=${{ env.DATABASE_URL}} \
+          --set-env-vars JWT_SECRET=${{env.JWT_SECRET}}
