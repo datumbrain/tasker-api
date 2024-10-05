@@ -13,8 +13,15 @@ RUN npm install
 # Step 5: Copy the rest of the app's source code
 COPY . .
 
-# Step 6: Expose the port the app will run on
+# Step 6: Generate the Prisma Client
+RUN npx prisma generate
+
+# Step 7: Run migrations to apply schema changes to the database
+# Ensure the DATABASE_URL is set in your environment or in your secrets
+RUN npx prisma migrate deploy
+
+# Step 8: Expose the port the app will run on
 EXPOSE 8080
 
-# Step 7: Start the app
+# Step 9: Start the app
 CMD ["npm", "start"]
