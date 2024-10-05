@@ -55,12 +55,18 @@ jobs:
               echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           fi
 
-      - name: Deploy API to GCP (${{ env.ENVIRONMENT}})
+      - name: Debug Environment Variables
         run: |
-          gcloud run deploy tasker-api-${{ env.ENVIRONMENT}} \
-          --image docker.io/naumanz/tasker-api:${{ env.ENVIRONMENT}} \
+          echo "HTTP_PORT=$HTTP_PORT"
+          echo "DATABASE_URL=$DATABASE_URL"
+          echo "JWT_SECRET=$JWT_SECRET"
+
+      - name: Deploy API to GCP ($ENVIRONMENT)
+        run: |
+          gcloud run deploy tasker-api-${{ github.event.inputs.environment }} \
+          --image docker.io/naumanz/tasker-api:${{ github.event.inputs.environment }} \
           --region us-central1 \
           --allow-unauthenticated \
-          --set-env-vars HTTP_PORT=${{ env.HTTP_PORT }} \
-          --set-env-vars DATABASE_URL=${{ env.DATABASE_URL}} \
-          --set-env-vars JWT_SECRET=${{env.JWT_SECRET}}
+          --set-env-vars HTTP_PORT=$HTTP_PORT \
+          --set-env-vars DATABASE_URL=$DATABASE_URL \
+          --set-env-vars JWT_SECRET=$JWT_SECRET
