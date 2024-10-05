@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment (uat or prod)'
+        required: true
+        default: 'uat'
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Write GCP service account key to file
+        run: |
+          printf "${{ secrets.GCP_SA_TOKEN }}" | base64 -d  > /home/runner/work/_temp/gcp-key.json
+
+      # Authenticate with GCP
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # Set up gcloud CLI
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      # Ensure gcloud is authenticated with the service account
+      - name: Activate Service Account
+        run: gcloud auth activate-service-account --key-file=/home/runner/work/_temp/gcp-key.json
+
+      - name: Deploy API to GCP
+        run: |
+          if [[ "${{ github.event.inputs.environment }}" == "uat" ]]; then
+            gcloud run deploy tasker-api-uat --image docker.io/naumanz/tasker-api:uat --region us-central1 --allow-unauthenticated
+          elif [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
+            gcloud run deploy tasker-api-prod --image docker.io/naumanz/tasker-api:prod --region us-central1 --allow-unauthenticated
+          fi
