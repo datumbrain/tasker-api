@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Copy the .env file if it exists
-COPY .env ./
+COPY ./.env ./
 
 # Step 6: Generate the Prisma Client
 RUN npx prisma generate
