@@ -39,10 +39,27 @@ jobs:
       - name: Activate Service Account
         run: gcloud auth activate-service-account --key-file=/home/runner/work/_temp/gcp-key.json
 
-      - name: Deploy API to GCP
+      - name: Prepare Env Variables based on environment
         run: |
+
           if [[ "${{ github.event.inputs.environment }}" == "uat" ]]; then
-            gcloud run deploy tasker-api-uat --image docker.io/naumanz/tasker-api:uat --region us-central1 --allow-unauthenticated
+              ENVIRONMENT=uat
+              HTTP_PORT=${{ secrets.HTTP_PORT }}
+              DATABASE_URL=${{ secrets.UAT_DB_URL }}
+              JWT_SECRET=${{ secrets.JWT_SECRET }}
           elif [[ "${{ github.event.inputs.environment }}" == "prod" ]]; then
-            gcloud run deploy tasker-api-prod --image docker.io/naumanz/tasker-api:prod --region us-central1 --allow-unauthenticated
+              ENVIRONMENT=prod
+              HTTP_PORT=${{ secrets.HTTP_PORT }}
+              DATABASE_URL=${{ secrets.UAT_DB_URL }}
+              JWT_SECRET=${{ secrets.JWT_SECRET }}
           fi
+
+      - name: Deploy API to GCP (${{ github.event.inputs.environment }})
+        run: |
+          gcloud run deploy tasker-api-$ENVIRONMENT \
+          --image docker.io/naumanz/tasker-api:$ENVIRONMENT \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --set-env-vars HTTP_PORT=$HTTP_PORT \
+          --set-env-vars DATABASE_URL=$DATABASE_URL \
+          --set-env-vars JWT_SECRET=$JWT_SECRET
