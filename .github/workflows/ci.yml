@@ -68,7 +68,7 @@ jobs:
             exit 1
           fi
 
-      # Step 12: Build the Docker image with the appropriate tag
+      # Step 12: Build the Docker image with the appropriate image tag
       - name: Build Docker image
         run: |
           IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/tasker-api:${{ env.ENVIRONMENT }}"
