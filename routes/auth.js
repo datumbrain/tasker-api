@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const jwtSecret = process.env.JWT_SECRET
+const jwtSecret = process.env.JWT_SECRET || 'test_secret'
 
 // Signup route
 router.post('/signup', async (req, res) => {
