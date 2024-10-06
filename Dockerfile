@@ -19,12 +19,8 @@ ENV DATABASE_URL=$DATABASE_URL
 # Step 6: Generate the Prisma Client
 RUN npx prisma generate
 
-# Step 7: Run migrations to apply schema changes to the database
-# Ensure the DATABASE_URL is set in your environment or in your secrets
-RUN npx prisma migrate deploy
-
 # Step 8: Expose the port the app will run on
 EXPOSE 8080
 
-# Step 9: Start the app
-CMD ["npm", "start"]
+# Step 9: Run migrations & Start the app
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
