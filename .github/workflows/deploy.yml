@@ -67,6 +67,6 @@ jobs:
           --image docker.io/naumanz/tasker-api:${{ github.event.inputs.environment }} \
           --region us-central1 \
           --allow-unauthenticated \
-          --set-env-vars HTTP_PORT=$HTTP_PORT \
-          --set-env-vars DATABASE_URL=$DATABASE_URL \
-          --set-env-vars JWT_SECRET=$JWT_SECRET
+          --set-env-vars HTTP_PORT=8080 \
+          --set-env-vars DATABASE_URL=postgresql://tasker-user:taskeruat123@34.44.12.21:5432/TaskerApp \
+          --set-env-vars JWT_SECRET=test_another_uat_secret
