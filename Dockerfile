@@ -27,4 +27,4 @@ RUN npx prisma generate
 EXPOSE 8080
 
 # Step 9: Run migrations & Start the app
-CMD ["sh", "-c", "npx primsa generate && npx prisma migrate deploy && npm start"]
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && npm start"]
