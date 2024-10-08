@@ -51,15 +51,9 @@ jobs:
               echo "Setting Production environment variables"
               echo "ENVIRONMENT=prod" >> $GITHUB_ENV
               echo "HTTP_PORT=${{ secrets.HTTP_PORT }}" >> $GITHUB_ENV
-              echo "DATABASE_URL=${{ secrets.UAT_DB_URL }}" >> $GITHUB_ENV
+              echo "DATABASE_URL=${{ secrets.PROD_DB_URL }}" >> $GITHUB_ENV
               echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
           fi
-
-      - name: Debug Environment Variables
-        run: |
-          echo "HTTP_PORT=$HTTP_PORT"
-          echo "DATABASE_URL=$DATABASE_URL"
-          echo "JWT_SECRET=$JWT_SECRET"
 
       - name: Deploy API to GCP ($ENVIRONMENT)
         run: |
@@ -67,6 +61,6 @@ jobs:
           --image docker.io/naumanz/tasker-api:${{ github.event.inputs.environment }} \
           --region us-central1 \
           --allow-unauthenticated \
-          --set-env-vars HTTP_PORT=8080 \
-          --set-env-vars DATABASE_URL=postgresql://tasker-user:taskeruat123@34.44.12.21:5432/TaskerApp \
-          --set-env-vars JWT_SECRET=test_another_uat_secret
+          --set-env-vars HTTP_PORT=${{ env.HTTP_PORT }} \
+          --set-env-vars DATABASE_URL=${{ env.DATABASE_URL }} \
+          --set-env-vars JWT_SECRET=${{ env.JWT_SECRET }}
