@@ -7,6 +7,10 @@ on:
         description: 'Deployment environment (uat or prod)'
         required: true
         default: 'uat'
+        type: choice
+        options:
+          - uat
+          - prod
 
 jobs:
   deploy-api:
